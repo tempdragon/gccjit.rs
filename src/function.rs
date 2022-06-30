@@ -53,6 +53,12 @@ pub enum InlineMode {
     Inline,
 }
 
+#[repr(C)]
+#[derive(Clone, Copy, Debug)]
+pub enum FnAttribute {
+    Target,
+}
+
 /// Function is gccjit's representation of a function. Functions are constructed
 /// by constructing basic blocks and connecting them together. Locals are declared
 /// at the function level.
@@ -156,6 +162,14 @@ impl<'ctx> Function<'ctx> {
                                                              types::get_ptr(&ty),
                                                              cstr.as_ptr());
             lvalue::from_ptr(ptr)
+        }
+    }
+
+    #[cfg(feature="master")]
+    pub fn add_attribute(&self, attribute: FnAttribute, value: &str) {
+        let cstr = CString::new(value).unwrap();
+        unsafe {
+            gccjit_sys::gcc_jit_function_add_attribute(self.ptr, std::mem::transmute(attribute), cstr.as_ptr());
         }
     }
 }

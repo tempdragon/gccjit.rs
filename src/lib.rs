@@ -46,5 +46,5 @@ pub use structs::Struct;
 pub use lvalue::{LValue, TlsModel, ToLValue};
 pub use rvalue::{RValue, ToRValue};
 pub use parameter::Parameter;
-pub use function::{Function, FunctionType, InlineMode};
+pub use function::{FnAttribute, Function, FunctionType, InlineMode};
 pub use block::{Block, BinaryOp, UnaryOp, ComparisonOp};

@@ -260,6 +260,13 @@ pub enum gcc_jit_inline_mode
     GCC_JIT_INLINE_MODE_INLINE,
 }
 
+#[cfg(feature="master")]
+#[repr(C)]
+pub enum gcc_jit_fn_attribute
+{
+    GCC_JIT_FN_ATTRIBUTE_TARGET,
+}
+
 #[link(name = "gccjit")]
 extern {
     // context operations
@@ -598,4 +605,7 @@ extern {
 
     #[cfg(feature="master")]
     pub fn gcc_jit_global_set_readonly(global: *mut gcc_jit_lvalue);
+
+    #[cfg(feature="master")]
+    pub fn gcc_jit_function_add_attribute(func: *mut gcc_jit_function, attribute: gcc_jit_fn_attribute, value: *const c_char);
 }
