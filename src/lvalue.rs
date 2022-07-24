@@ -12,6 +12,54 @@ use field;
 use location::Location;
 use location;
 
+#[cfg(feature="master")]
+#[derive(Clone, Copy, Debug)]
+pub enum Visibility {
+    Default,
+    Hidden,
+    Internal,
+    Protected,
+}
+
+#[cfg(feature="master")]
+impl Visibility {
+    pub fn as_str(&self) -> &'static str {
+        match *self {
+            Visibility::Default => "default",
+            Visibility::Hidden => "hidden",
+            Visibility::Internal => "internal",
+            Visibility::Protected => "protected",
+        }
+    }
+}
+
+#[cfg(feature="master")]
+pub enum AttributeValue<'a> {
+    Int(i32),
+    String(&'a str),
+}
+
+#[cfg(feature="master")]
+#[derive(Clone, Debug)]
+pub enum VarAttribute {
+    Visibility(Visibility),
+}
+
+#[cfg(feature="master")]
+impl VarAttribute {
+    fn get_value(&self) -> AttributeValue {
+        match *self {
+            VarAttribute::Visibility(visibility) => AttributeValue::String(visibility.as_str()),
+        }
+    }
+
+    fn to_sys(&self) -> gccjit_sys::gcc_jit_variable_attribute {
+        match *self {
+            VarAttribute::Visibility(_) => gccjit_sys::gcc_jit_variable_attribute::GCC_JIT_VARIABLE_ATTRIBUTE_VISIBILITY,
+        }
+    }
+}
+
 #[derive(Clone, Copy, Debug)]
 pub enum TlsModel {
     GlobalDynamic,
@@ -163,6 +211,20 @@ impl<'ctx> LValue<'ctx> {
     pub fn get_alignment(&self) -> i32 {
         unsafe {
             gccjit_sys::gcc_jit_lvalue_get_alignment(self.ptr)
+        }
+    }
+
+    #[cfg(feature="master")]
+    pub fn add_attribute(&self, attribute: VarAttribute) {
+        let value = attribute.get_value();
+        match value {
+            AttributeValue::Int(_) => unimplemented!(),
+            AttributeValue::String(string) => {
+                let cstr = CString::new(string).unwrap();
+                unsafe {
+                    gccjit_sys::gcc_jit_lvalue_add_attribute(self.ptr, attribute.to_sys(), cstr.as_ptr());
+                }
+            },
         }
     }
 }

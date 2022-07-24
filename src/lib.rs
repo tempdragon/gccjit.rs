@@ -43,8 +43,12 @@ pub use types::Type;
 pub use types::Typeable;
 pub use field::Field;
 pub use structs::Struct;
+#[cfg(feature="master")]
+pub use lvalue::{VarAttribute, Visibility};
 pub use lvalue::{LValue, TlsModel, ToLValue};
 pub use rvalue::{RValue, ToRValue};
 pub use parameter::Parameter;
-pub use function::{FnAttribute, Function, FunctionType, InlineMode};
+#[cfg(feature="master")]
+pub use function::FnAttribute;
+pub use function::{Function, FunctionType, InlineMode};
 pub use block::{Block, BinaryOp, UnaryOp, ComparisonOp};

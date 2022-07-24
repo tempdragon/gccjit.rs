@@ -70,7 +70,12 @@ impl<'ctx> Struct<'ctx> {
 
     pub fn get_field_count(&self) -> usize {
         unsafe {
-            gccjit_sys::gcc_jit_struct_get_field_count(self.ptr) as usize
+            let count = gccjit_sys::gcc_jit_struct_get_field_count(self.ptr) as usize;
+            #[cfg(debug_assertions)]
+            if let Ok(Some(error)) = self.to_object().get_context().get_last_error() {
+                panic!("{}", error);
+            }
+            count
         }
     }
 }

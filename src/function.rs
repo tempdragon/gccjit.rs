@@ -9,6 +9,8 @@ use block;
 use context::Context;
 use location::Location;
 use location;
+#[cfg(feature="master")]
+use lvalue::{AttributeValue, Visibility};
 use lvalue::LValue;
 use lvalue;
 use object::{ToObject, Object};
@@ -53,10 +55,28 @@ pub enum InlineMode {
     Inline,
 }
 
-#[repr(C)]
+#[cfg(feature="master")]
 #[derive(Clone, Copy, Debug)]
-pub enum FnAttribute {
-    Target,
+pub enum FnAttribute<'a> {
+    Target(&'a str),
+    Visibility(Visibility),
+}
+
+#[cfg(feature="master")]
+impl<'a> FnAttribute<'a> {
+    fn get_value(&self) -> AttributeValue {
+        match *self {
+            FnAttribute::Target(target) => AttributeValue::String(target),
+            FnAttribute::Visibility(visibility) => AttributeValue::String(visibility.as_str()),
+        }
+    }
+
+    fn to_sys(&self) -> gccjit_sys::gcc_jit_fn_attribute {
+        match *self {
+            FnAttribute::Target(_) => gccjit_sys::gcc_jit_fn_attribute::GCC_JIT_FN_ATTRIBUTE_TARGET,
+            FnAttribute::Visibility(_) => gccjit_sys::gcc_jit_fn_attribute::GCC_JIT_FN_ATTRIBUTE_VISIBILITY,
+        }
+    }
 }
 
 /// Function is gccjit's representation of a function. Functions are constructed
@@ -166,10 +186,16 @@ impl<'ctx> Function<'ctx> {
     }
 
     #[cfg(feature="master")]
-    pub fn add_attribute(&self, attribute: FnAttribute, value: &str) {
-        let cstr = CString::new(value).unwrap();
-        unsafe {
-            gccjit_sys::gcc_jit_function_add_attribute(self.ptr, std::mem::transmute(attribute), cstr.as_ptr());
+    pub fn add_attribute<'a>(&self, attribute: FnAttribute<'a>) {
+        let value = attribute.get_value();
+        match value {
+            AttributeValue::Int(_) => unimplemented!(),
+            AttributeValue::String(string) => {
+                let cstr = CString::new(string).unwrap();
+                unsafe {
+                    gccjit_sys::gcc_jit_function_add_attribute(self.ptr, attribute.to_sys(), cstr.as_ptr());
+                }
+            },
         }
     }
 }
