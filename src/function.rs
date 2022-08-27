@@ -59,6 +59,7 @@ pub enum InlineMode {
 #[derive(Clone, Copy, Debug)]
 pub enum FnAttribute<'a> {
     Target(&'a str),
+    Used,
     Visibility(Visibility),
 }
 
@@ -67,6 +68,7 @@ impl<'a> FnAttribute<'a> {
     fn get_value(&self) -> AttributeValue {
         match *self {
             FnAttribute::Target(target) => AttributeValue::String(target),
+            FnAttribute::Used => AttributeValue::None,
             FnAttribute::Visibility(visibility) => AttributeValue::String(visibility.as_str()),
         }
     }
@@ -74,6 +76,7 @@ impl<'a> FnAttribute<'a> {
     fn to_sys(&self) -> gccjit_sys::gcc_jit_fn_attribute {
         match *self {
             FnAttribute::Target(_) => gccjit_sys::gcc_jit_fn_attribute::GCC_JIT_FN_ATTRIBUTE_TARGET,
+            FnAttribute::Used => gccjit_sys::gcc_jit_fn_attribute::GCC_JIT_FN_ATTRIBUTE_USED,
             FnAttribute::Visibility(_) => gccjit_sys::gcc_jit_fn_attribute::GCC_JIT_FN_ATTRIBUTE_VISIBILITY,
         }
     }
@@ -190,10 +193,15 @@ impl<'ctx> Function<'ctx> {
         let value = attribute.get_value();
         match value {
             AttributeValue::Int(_) => unimplemented!(),
+            AttributeValue::None => {
+                unsafe {
+                    gccjit_sys::gcc_jit_function_add_attribute(self.ptr, attribute.to_sys());
+                }
+            },
             AttributeValue::String(string) => {
                 let cstr = CString::new(string).unwrap();
                 unsafe {
-                    gccjit_sys::gcc_jit_function_add_attribute(self.ptr, attribute.to_sys(), cstr.as_ptr());
+                    gccjit_sys::gcc_jit_function_add_string_attribute(self.ptr, attribute.to_sys(), cstr.as_ptr());
                 }
             },
         }

@@ -265,6 +265,7 @@ pub enum gcc_jit_inline_mode
 pub enum gcc_jit_fn_attribute
 {
     GCC_JIT_FN_ATTRIBUTE_TARGET,
+    GCC_JIT_FN_ATTRIBUTE_USED,
     GCC_JIT_FN_ATTRIBUTE_VISIBILITY,
 }
 
@@ -615,7 +616,10 @@ extern {
     pub fn gcc_jit_global_set_readonly(global: *mut gcc_jit_lvalue);
 
     #[cfg(feature="master")]
-    pub fn gcc_jit_function_add_attribute(func: *mut gcc_jit_function, attribute: gcc_jit_fn_attribute, value: *const c_char);
+    pub fn gcc_jit_function_add_attribute(func: *mut gcc_jit_function, attribute: gcc_jit_fn_attribute);
+
+    #[cfg(feature="master")]
+    pub fn gcc_jit_function_add_string_attribute(func: *mut gcc_jit_function, attribute: gcc_jit_fn_attribute, value: *const c_char);
 
     #[cfg(feature="master")]
     pub fn gcc_jit_lvalue_add_attribute(variable: *mut gcc_jit_lvalue, attribute: gcc_jit_variable_attribute, value: *const c_char);

@@ -36,6 +36,7 @@ impl Visibility {
 #[cfg(feature="master")]
 pub enum AttributeValue<'a> {
     Int(i32),
+    None,
     String(&'a str),
 }
 
@@ -219,6 +220,7 @@ impl<'ctx> LValue<'ctx> {
         let value = attribute.get_value();
         match value {
             AttributeValue::Int(_) => unimplemented!(),
+            AttributeValue::None => unimplemented!(),
             AttributeValue::String(string) => {
                 let cstr = CString::new(string).unwrap();
                 unsafe {
