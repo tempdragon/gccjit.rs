@@ -62,7 +62,7 @@ pub enum ComparisonOp {
 /// A basic block consists of a series of instructions terminated by a terminator
 /// instruction, which can be either a jump to one block, a conditional branch to
 /// two blocks (true/false branches), a return, or a void return.
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Eq, Hash, PartialEq)]
 pub struct Block<'ctx> {
     marker: PhantomData<&'ctx Context<'ctx>>,
     ptr: *mut gccjit_sys::gcc_jit_block
@@ -113,7 +113,19 @@ impl<'ctx> Block<'ctx> {
         }
     }
 
-    /*pub fn add_try_finally(&self, loc: Option<Location<'ctx>>, try_block: Block<'ctx>, finally_block: Block<'ctx>) {
+    #[cfg(feature="master")]
+    pub fn add_try_catch(&self, loc: Option<Location<'ctx>>, try_block: Block<'ctx>, catch_block: Block<'ctx>) {
+        let loc_ptr = match loc {
+                Some(loc) => unsafe { location::get_ptr(&loc) },
+                None => ptr::null_mut()
+            };
+        unsafe {
+            gccjit_sys::gcc_jit_block_add_try_catch(self.ptr, loc_ptr, try_block.ptr, catch_block.ptr);
+        }
+    }
+
+    #[cfg(feature="master")]
+    pub fn add_try_finally(&self, loc: Option<Location<'ctx>>, try_block: Block<'ctx>, finally_block: Block<'ctx>) {
         let loc_ptr = match loc {
                 Some(loc) => unsafe { location::get_ptr(&loc) },
                 None => ptr::null_mut()
@@ -121,7 +133,7 @@ impl<'ctx> Block<'ctx> {
         unsafe {
             gccjit_sys::gcc_jit_block_add_try_finally(self.ptr, loc_ptr, try_block.ptr, finally_block.ptr);
         }
-    }*/
+    }
 
     /// Assigns the value of an rvalue to an lvalue directly. Equivalent
     /// to <lvalue> = <rvalue> in C.

@@ -53,6 +53,16 @@ pub struct FunctionPtrType<'ctx> {
     ptr: *mut gccjit_sys::gcc_jit_function_type
 }
 
+impl<'ctx> fmt::Debug for FunctionPtrType<'ctx> {
+    fn fmt<'a>(&self, fmt: &mut fmt::Formatter<'a>) -> Result<(), fmt::Error> {
+        write!(fmt, "{:?} (", self.get_return_type())?;
+        for i in 0..self.get_param_count() {
+            write!(fmt, "{:?}, ", self.get_param_type(i))?;
+        }
+        write!(fmt, ")")
+    }
+}
+
 impl<'ctx> FunctionPtrType<'ctx> {
     unsafe fn from_ptr(ptr: *mut gccjit_sys::gcc_jit_function_type) -> FunctionPtrType<'ctx> {
         FunctionPtrType {

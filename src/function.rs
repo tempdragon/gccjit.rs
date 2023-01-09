@@ -29,7 +29,7 @@ use types;
 /// is a function with external linkage, and always inline is a function that is
 /// always inlined wherever it is called and cannot be accessed outside of the jit.
 #[repr(C)]
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy, Debug, PartialEq)]
 pub enum FunctionType {
     /// Defines a function that is "exported" by the JIT and can be called from
     /// Rust.
@@ -68,8 +68,8 @@ impl<'a> FnAttribute<'a> {
     fn get_value(&self) -> AttributeValue {
         match *self {
             FnAttribute::Target(target) => AttributeValue::String(target),
-            FnAttribute::Used => AttributeValue::None,
             FnAttribute::Visibility(visibility) => AttributeValue::String(visibility.as_str()),
+            FnAttribute::Used => AttributeValue::None,
         }
     }
 
@@ -164,11 +164,12 @@ impl<'ctx> Function<'ctx> {
         }
     }
 
-    /*pub fn set_personality_function(&self, personality_func: Function<'ctx>) {
+    #[cfg(feature="master")]
+    pub fn set_personality_function(&self, personality_func: Function<'ctx>) {
         unsafe {
             gccjit_sys::gcc_jit_function_set_personality_function(self.ptr, personality_func.ptr);
         }
-    }*/
+    }
 
     pub fn new_local<S: AsRef<str>>(&self,
                      loc: Option<Location<'ctx>>,
@@ -184,6 +185,10 @@ impl<'ctx> Function<'ctx> {
                                                              loc_ptr,
                                                              types::get_ptr(&ty),
                                                              cstr.as_ptr());
+            #[cfg(debug_assertions)]
+            if let Ok(Some(error)) = self.to_object().get_context().get_last_error() {
+                panic!("{} ({:?})", error, self);
+            }
             lvalue::from_ptr(ptr)
         }
     }
