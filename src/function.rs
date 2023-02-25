@@ -58,6 +58,9 @@ pub enum InlineMode {
 #[cfg(feature="master")]
 #[derive(Clone, Copy, Debug)]
 pub enum FnAttribute<'a> {
+    /*AlwaysInline,
+    Inline,
+    NoInline,*/
     Target(&'a str),
     Used,
     Visibility(Visibility),
@@ -69,12 +72,16 @@ impl<'a> FnAttribute<'a> {
         match *self {
             FnAttribute::Target(target) => AttributeValue::String(target),
             FnAttribute::Visibility(visibility) => AttributeValue::String(visibility.as_str()),
-            FnAttribute::Used => AttributeValue::None,
+            /*FnAttribute::AlwaysInline | FnAttribute::Inline | FnAttribute::NoInline |*/ FnAttribute::Used =>
+                AttributeValue::None,
         }
     }
 
     fn to_sys(&self) -> gccjit_sys::gcc_jit_fn_attribute {
         match *self {
+            /*FnAttribute::AlwaysInline => gccjit_sys::gcc_jit_fn_attribute::GCC_JIT_FN_ATTRIBUTE_ALWAYS_INLINE,
+            FnAttribute::Inline => gccjit_sys::gcc_jit_fn_attribute::GCC_JIT_FN_ATTRIBUTE_INLINE,
+            FnAttribute::NoInline => gccjit_sys::gcc_jit_fn_attribute::GCC_JIT_FN_ATTRIBUTE_NOINLINE,*/
             FnAttribute::Target(_) => gccjit_sys::gcc_jit_fn_attribute::GCC_JIT_FN_ATTRIBUTE_TARGET,
             FnAttribute::Used => gccjit_sys::gcc_jit_fn_attribute::GCC_JIT_FN_ATTRIBUTE_USED,
             FnAttribute::Visibility(_) => gccjit_sys::gcc_jit_fn_attribute::GCC_JIT_FN_ATTRIBUTE_VISIBILITY,

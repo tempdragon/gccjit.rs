@@ -882,23 +882,6 @@ impl<'ctx> Context<'ctx> {
     }
 
     #[cfg(feature="master")]
-    pub fn new_vector_constructor<'a>(&'a self, loc: Option<Location<'a>>, vector_type: types::Type<'a>, elements: &[RValue<'a>]) -> RValue<'a> {
-        unsafe {
-            let loc_ptr = match loc {
-                Some(loc) => location::get_ptr(&loc),
-                None => ptr::null_mut()
-            };
-
-            let ptr = gccjit_sys::gcc_jit_context_new_vector_constructor(self.ptr, loc_ptr, types::get_ptr(&vector_type), elements.len() as _, elements.as_ptr() as *mut *mut _);
-            #[cfg(debug_assertions)]
-            if let Ok(Some(error)) = self.get_last_error() {
-                panic!("{}", error);
-            }
-            rvalue::from_ptr(ptr)
-        }
-    }
-
-    #[cfg(feature="master")]
     pub fn new_vector_access<'a>(&'a self, loc: Option<Location<'a>>, vector: RValue<'a>, index: RValue<'a>) -> LValue<'a> {
         unsafe {
             let loc_ptr = match loc {
@@ -1298,6 +1281,7 @@ pub enum CType {
     UInt64t,
     UInt128t,
     ConstCharPtr,
+    BFloat16,
 }
 
 impl CType {
@@ -1330,6 +1314,7 @@ impl CType {
             UInt64t => GCC_JIT_TYPE_UINT64_T,
             UInt128t => GCC_JIT_TYPE_UINT128_T,
             ConstCharPtr => GCC_JIT_TYPE_CONST_CHAR_PTR,
+            BFloat16 => GCC_JIT_TYPE_BFLOAT16,
         }
     }
 }

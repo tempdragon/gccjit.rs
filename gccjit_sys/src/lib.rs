@@ -116,6 +116,8 @@ pub enum gcc_jit_types {
     GCC_JIT_TYPE_INT32_T,
     GCC_JIT_TYPE_INT64_T,
     GCC_JIT_TYPE_INT128_T,
+
+    GCC_JIT_TYPE_BFLOAT16,
 }
 
 #[repr(C)]
@@ -264,6 +266,9 @@ pub enum gcc_jit_inline_mode
 #[repr(C)]
 pub enum gcc_jit_fn_attribute
 {
+    /*GCC_JIT_FN_ATTRIBUTE_ALWAYS_INLINE,
+    GCC_JIT_FN_ATTRIBUTE_INLINE,
+    GCC_JIT_FN_ATTRIBUTE_NOINLINE,*/
     GCC_JIT_FN_ATTRIBUTE_TARGET,
     GCC_JIT_FN_ATTRIBUTE_USED,
     GCC_JIT_FN_ATTRIBUTE_VISIBILITY,
@@ -595,8 +600,6 @@ extern {
 
     #[cfg(feature="master")]
     pub fn gcc_jit_context_new_rvalue_vector_perm(ctxt: *mut gcc_jit_context, loc: *mut gcc_jit_location, elements1: *mut gcc_jit_rvalue, elements2: *mut gcc_jit_rvalue, mask: *mut gcc_jit_rvalue) -> *mut gcc_jit_rvalue;
-    #[cfg(feature="master")]
-    pub fn gcc_jit_context_new_vector_constructor(ctxt: *mut gcc_jit_context, loc: *mut gcc_jit_location, typ: *mut gcc_jit_type, num_values: size_t, values: *mut *mut gcc_jit_rvalue) -> *mut gcc_jit_rvalue;
     #[cfg(feature="master")]
     pub fn gcc_jit_context_new_vector_access(ctxt: *mut gcc_jit_context, loc: *mut gcc_jit_location, vector: *mut gcc_jit_rvalue, index: *mut gcc_jit_rvalue) -> *mut gcc_jit_lvalue;
 
