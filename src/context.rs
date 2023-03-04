@@ -3,7 +3,7 @@ use std::ops::Drop;
 use std::ffi::{CStr, CString};
 use std::marker::PhantomData;
 use std::mem;
-use std::os::raw::c_int;
+use std::os::raw::{c_int, c_ulong};
 use std::ptr;
 use std::str::Utf8Error;
 
@@ -403,7 +403,7 @@ impl<'ctx> Context<'ctx> {
     pub fn new_array_type<'a>(&'a self,
                               loc: Option<Location<'a>>,
                               ty: types::Type<'a>,
-                              num_elements: i32) -> types::Type<'a> {
+                              num_elements: u64) -> types::Type<'a> {
         let loc_ptr = match loc {
             Some(loc) => unsafe { location::get_ptr(&loc) },
             None => ptr::null_mut()
@@ -412,7 +412,7 @@ impl<'ctx> Context<'ctx> {
             let ptr = gccjit_sys::gcc_jit_context_new_array_type(self.ptr,
                                                                  loc_ptr,
                                                                  types::get_ptr(&ty),
-                                                                 num_elements);
+                                                                 num_elements as c_ulong);
             #[cfg(debug_assertions)]
             if let Ok(Some(error)) = self.get_last_error() {
                 panic!("{}", error);

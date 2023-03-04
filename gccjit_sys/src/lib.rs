@@ -2,7 +2,7 @@
 
 extern crate libc;
 
-use libc::{c_char, c_int, FILE, c_void, c_long, c_double, size_t, ssize_t};
+use libc::{c_char, c_int, FILE, c_void, c_long, c_double, c_ulong, size_t, ssize_t};
 
 // opaque pointers
 pub enum gcc_jit_context {}
@@ -344,7 +344,7 @@ extern {
     pub fn gcc_jit_context_new_array_type(ctx: *mut gcc_jit_context,
                                           loc: *mut gcc_jit_location,
                                           ty: *mut gcc_jit_type,
-                                          num_elements: c_int) -> *mut gcc_jit_type;
+                                          num_elements: c_ulong) -> *mut gcc_jit_type;
     // struct handling
     pub fn gcc_jit_context_new_field(ctx: *mut gcc_jit_context,
                                      loc: *mut gcc_jit_location,
