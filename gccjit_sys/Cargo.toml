@@ -12,4 +12,4 @@ repository = "https://github.com/swgillespie/gccjit.rs"
 master = []
 
 [dependencies]
-libc = "0.1.6"
+libc = "0.2"
