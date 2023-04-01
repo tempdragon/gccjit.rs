@@ -50,5 +50,5 @@ pub use rvalue::{RValue, ToRValue};
 pub use parameter::Parameter;
 #[cfg(feature="master")]
 pub use function::FnAttribute;
-pub use function::{Function, FunctionType, InlineMode};
+pub use function::{Function, FunctionType};
 pub use block::{Block, BinaryOp, UnaryOp, ComparisonOp};

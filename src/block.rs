@@ -239,6 +239,10 @@ impl<'ctx> Block<'ctx> {
                                                     loc_ptr,
                                                     target.ptr);
         }
+        #[cfg(debug_assertions)]
+        if let Ok(Some(error)) = self.to_object().get_context().get_last_error() {
+            panic!("{}", error);
+        }
     }
 
     /// Terminates a block by returning from the containing function, setting

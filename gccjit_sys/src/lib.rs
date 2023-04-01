@@ -253,22 +253,13 @@ pub enum gcc_jit_comparison
     GCC_JIT_COMPARISON_GE
 }
 
-#[repr(C)]
-pub enum gcc_jit_inline_mode
-{
-    GCC_JIT_INLINE_MODE_DEFAULT,
-    GCC_JIT_INLINE_MODE_ALWAYS_INLINE,
-    GCC_JIT_INLINE_MODE_NO_INLINE,
-    GCC_JIT_INLINE_MODE_INLINE,
-}
-
 #[cfg(feature="master")]
 #[repr(C)]
 pub enum gcc_jit_fn_attribute
 {
-    /*GCC_JIT_FN_ATTRIBUTE_ALWAYS_INLINE,
+    GCC_JIT_FN_ATTRIBUTE_ALWAYS_INLINE,
     GCC_JIT_FN_ATTRIBUTE_INLINE,
-    GCC_JIT_FN_ATTRIBUTE_NOINLINE,*/
+    GCC_JIT_FN_ATTRIBUTE_NOINLINE,
     GCC_JIT_FN_ATTRIBUTE_TARGET,
     GCC_JIT_FN_ATTRIBUTE_USED,
     GCC_JIT_FN_ATTRIBUTE_VISIBILITY,
@@ -576,8 +567,6 @@ extern {
     pub fn gcc_jit_lvalue_set_link_section(lvalue: *mut gcc_jit_lvalue, name: *const c_char);
 
     pub fn gcc_jit_context_new_bitcast(ctxt: *mut gcc_jit_context, loc: *mut gcc_jit_location, rvalue: *mut gcc_jit_rvalue, type_: *mut gcc_jit_type) -> *mut gcc_jit_rvalue;
-
-    //pub fn gcc_jit_function_set_inline_mode(func: *mut gcc_jit_function, inline_mode: gcc_jit_inline_mode);
 
     pub fn gcc_jit_lvalue_set_register_name(lvalue: *mut gcc_jit_lvalue, reg_name: *const c_char);
 

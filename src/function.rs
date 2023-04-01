@@ -46,21 +46,12 @@ pub enum FunctionType {
     AlwaysInline
 }
 
-#[repr(C)]
-#[derive(Clone, Copy, Debug)]
-pub enum InlineMode {
-    Default,
-    AlwaysInline,
-    NoInline,
-    Inline,
-}
-
 #[cfg(feature="master")]
 #[derive(Clone, Copy, Debug)]
 pub enum FnAttribute<'a> {
-    /*AlwaysInline,
+    AlwaysInline,
     Inline,
-    NoInline,*/
+    NoInline,
     Target(&'a str),
     Used,
     Visibility(Visibility),
@@ -72,16 +63,16 @@ impl<'a> FnAttribute<'a> {
         match *self {
             FnAttribute::Target(target) => AttributeValue::String(target),
             FnAttribute::Visibility(visibility) => AttributeValue::String(visibility.as_str()),
-            /*FnAttribute::AlwaysInline | FnAttribute::Inline | FnAttribute::NoInline |*/ FnAttribute::Used =>
+            FnAttribute::AlwaysInline | FnAttribute::Inline | FnAttribute::NoInline | FnAttribute::Used =>
                 AttributeValue::None,
         }
     }
 
     fn to_sys(&self) -> gccjit_sys::gcc_jit_fn_attribute {
         match *self {
-            /*FnAttribute::AlwaysInline => gccjit_sys::gcc_jit_fn_attribute::GCC_JIT_FN_ATTRIBUTE_ALWAYS_INLINE,
+            FnAttribute::AlwaysInline => gccjit_sys::gcc_jit_fn_attribute::GCC_JIT_FN_ATTRIBUTE_ALWAYS_INLINE,
             FnAttribute::Inline => gccjit_sys::gcc_jit_fn_attribute::GCC_JIT_FN_ATTRIBUTE_INLINE,
-            FnAttribute::NoInline => gccjit_sys::gcc_jit_fn_attribute::GCC_JIT_FN_ATTRIBUTE_NOINLINE,*/
+            FnAttribute::NoInline => gccjit_sys::gcc_jit_fn_attribute::GCC_JIT_FN_ATTRIBUTE_NOINLINE,
             FnAttribute::Target(_) => gccjit_sys::gcc_jit_fn_attribute::GCC_JIT_FN_ATTRIBUTE_TARGET,
             FnAttribute::Used => gccjit_sys::gcc_jit_fn_attribute::GCC_JIT_FN_ATTRIBUTE_USED,
             FnAttribute::Visibility(_) => gccjit_sys::gcc_jit_fn_attribute::GCC_JIT_FN_ATTRIBUTE_VISIBILITY,
@@ -121,12 +112,6 @@ impl<'ctx> Function<'ctx> {
             parameter::from_ptr(ptr)
         }
     }
-
-    /*pub fn set_inline_mode(&self, inline_mode: InlineMode) {
-        unsafe {
-            gccjit_sys::gcc_jit_function_set_inline_mode(self.ptr, std::mem::transmute(inline_mode));
-        }
-    }*/
 
     pub fn get_param_count(&self) -> usize {
         unsafe {
