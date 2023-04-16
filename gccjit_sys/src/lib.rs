@@ -621,4 +621,7 @@ extern {
 
     #[cfg(feature="master")]
     pub fn gcc_jit_function_set_personality_function(func: *mut gcc_jit_function, personality_func: *mut gcc_jit_function);
+
+    #[cfg(feature="master")]
+    pub fn gcc_jit_set_global_personality_function_name(name: *const c_char);
 }
