@@ -55,6 +55,7 @@ pub enum FnAttribute<'a> {
     Target(&'a str),
     Used,
     Visibility(Visibility),
+    Cold,
 }
 
 #[cfg(feature="master")]
@@ -63,8 +64,11 @@ impl<'a> FnAttribute<'a> {
         match *self {
             FnAttribute::Target(target) => AttributeValue::String(target),
             FnAttribute::Visibility(visibility) => AttributeValue::String(visibility.as_str()),
-            FnAttribute::AlwaysInline | FnAttribute::Inline | FnAttribute::NoInline | FnAttribute::Used =>
-                AttributeValue::None,
+            FnAttribute::AlwaysInline
+            | FnAttribute::Inline
+            | FnAttribute::NoInline
+            | FnAttribute::Used
+            | FnAttribute::Cold => AttributeValue::None,
         }
     }
 
@@ -76,6 +80,7 @@ impl<'a> FnAttribute<'a> {
             FnAttribute::Target(_) => gccjit_sys::gcc_jit_fn_attribute::GCC_JIT_FN_ATTRIBUTE_TARGET,
             FnAttribute::Used => gccjit_sys::gcc_jit_fn_attribute::GCC_JIT_FN_ATTRIBUTE_USED,
             FnAttribute::Visibility(_) => gccjit_sys::gcc_jit_fn_attribute::GCC_JIT_FN_ATTRIBUTE_VISIBILITY,
+            FnAttribute::Cold => gccjit_sys::gcc_jit_fn_attribute::GCC_JIT_FN_ATTRIBUTE_COLD,
         }
     }
 }
