@@ -13,19 +13,18 @@ env:
 jobs:
   build:
     runs-on: ubuntu-22.04
-
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions-rs/toolchain@v1
+      - uses: actions/checkout@v3
+      - uses: actions-rs/toolchain@v1
         with:
           profile: minimal
           toolchain: stable
           override: true
           components: clippy
 
-    - name: Download artifact
-      uses: dawidd6/action-download-artifact@v2
-      with:
+      - name: Download artifact
+        uses: dawidd6/action-download-artifact@v2
+        with:
           workflow: main.yml
           name: "libgccjit.so"
           path: gcc-build
@@ -34,46 +33,43 @@ jobs:
           event: push
           search_artifacts: true # Because, instead, the action only check the last job ran and that won't work since we want multiple artifacts.
 
-    - name: Setup path to libgccjit
-      run: |
+      - name: Setup path to libgccjit
+        run: |
           echo $(readlink -f gcc-build) > gcc_path
           # NOTE: the filename is still libgccjit.so even when the artifact name is different.
           ln gcc-build/libgccjit.so gcc-build/libgccjit.so.0
 
-    - name: Set env
-      run: |
-        echo "LIBRARY_PATH=$(cat gcc_path)" >> $GITHUB_ENV
-        echo "LD_LIBRARY_PATH=$(cat gcc_path)" >> $GITHUB_ENV
-        echo "workspace="$GITHUB_WORKSPACE >> $GITHUB_ENV
+      - name: Set env
+        run: |
+          echo "LIBRARY_PATH=$(cat gcc_path)" >> $GITHUB_ENV
+          echo "LD_LIBRARY_PATH=$(cat gcc_path)" >> $GITHUB_ENV
+          echo "workspace="$GITHUB_WORKSPACE >> $GITHUB_ENV
 
-    - name: Set RUST_COMPILER_RT_ROOT
-      run: echo "RUST_COMPILER_RT_ROOT="${{ env.workspace }}/llvm/compiler-rt >> $GITHUB_ENV
+      - name: Cache cargo registry
+        uses: actions/cache@v3
+        with:
+          path: ~/.cargo/registry
+          key: ${{ runner.os }}-cargo-registry2-${{ hashFiles('**/Cargo.lock') }}
 
-    - name: Cache cargo registry
-      uses: actions/cache@v3
-      with:
-        path: ~/.cargo/registry
-        key: ${{ runner.os }}-cargo-registry2-${{ hashFiles('**/Cargo.lock') }}
+      - name: Cache cargo index
+        uses: actions/cache@v3
+        with:
+          path: ~/.cargo/git
+          key: ${{ runner.os }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
 
-    - name: Cache cargo index
-      uses: actions/cache@v3
-      with:
-        path: ~/.cargo/git
-        key: ${{ runner.os }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
+      - name: Cache cargo target dir
+        uses: actions/cache@v3
+        with:
+          path: target
+          key: ${{ runner.os }}-cargo-build-target-${{ hashFiles('rust-toolchain') }}
 
-    - name: Cache cargo target dir
-      uses: actions/cache@v3
-      with:
-        path: target
-        key: ${{ runner.os }}-cargo-build-target-${{ hashFiles('rust-toolchain') }}
+      - name: Build
+        run: |
+          cargo build
+          cargo build --features master
+          cargo build --examples
 
-    - name: Build
-      run: |
-        cargo build
-        cargo build --features master
-        cargo build --examples
-
-    - name: clippy
-      run: |
-        cargo clippy --all-targets -- -D warnings
-        cargo clippy --all-targets --features master -- -D warnings
+      - name: clippy
+        run: |
+          cargo clippy --all-targets -- -D warnings
+          cargo clippy --all-targets --features master -- -D warnings
