@@ -68,7 +68,7 @@ impl<'ctx> ExtendedAsm<'ctx> {
     pub unsafe fn from_ptr(ptr: *mut gccjit_sys::gcc_jit_extended_asm) -> Self {
         Self {
             marker: PhantomData,
-            ptr: ptr
+            ptr
         }
     }
 }

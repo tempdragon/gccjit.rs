@@ -330,7 +330,7 @@ impl<'ctx> Block<'ctx> {
 pub unsafe fn from_ptr<'ctx>(ptr: *mut gccjit_sys::gcc_jit_block) -> Block<'ctx> {
     Block {
         marker: PhantomData,
-        ptr: ptr
+        ptr
     }
 }
 

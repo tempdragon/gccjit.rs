@@ -47,7 +47,7 @@ pub enum FunctionType {
 }
 
 #[cfg(feature="master")]
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Debug)]
 pub enum FnAttribute<'a> {
     AlwaysInline,
     Inline,
@@ -72,7 +72,7 @@ impl<'a> FnAttribute<'a> {
         }
     }
 
-    fn to_sys(&self) -> gccjit_sys::gcc_jit_fn_attribute {
+    fn as_sys(&self) -> gccjit_sys::gcc_jit_fn_attribute {
         match *self {
             FnAttribute::AlwaysInline => gccjit_sys::gcc_jit_fn_attribute::GCC_JIT_FN_ATTRIBUTE_ALWAYS_INLINE,
             FnAttribute::Inline => gccjit_sys::gcc_jit_fn_attribute::GCC_JIT_FN_ATTRIBUTE_INLINE,
@@ -197,13 +197,13 @@ impl<'ctx> Function<'ctx> {
             AttributeValue::Int(_) => unimplemented!(),
             AttributeValue::None => {
                 unsafe {
-                    gccjit_sys::gcc_jit_function_add_attribute(self.ptr, attribute.to_sys());
+                    gccjit_sys::gcc_jit_function_add_attribute(self.ptr, attribute.as_sys());
                 }
             },
             AttributeValue::String(string) => {
                 let cstr = CString::new(string).unwrap();
                 unsafe {
-                    gccjit_sys::gcc_jit_function_add_string_attribute(self.ptr, attribute.to_sys(), cstr.as_ptr());
+                    gccjit_sys::gcc_jit_function_add_string_attribute(self.ptr, attribute.as_sys(), cstr.as_ptr());
                 }
             },
         }
@@ -213,7 +213,7 @@ impl<'ctx> Function<'ctx> {
 pub unsafe fn from_ptr<'ctx>(ptr: *mut gccjit_sys::gcc_jit_function) -> Function<'ctx> {
     Function {
         marker: PhantomData,
-        ptr: ptr
+        ptr
     }
 }
 

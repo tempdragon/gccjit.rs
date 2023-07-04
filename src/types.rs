@@ -30,7 +30,7 @@ impl<'ctx> VectorType<'ctx> {
     unsafe fn from_ptr(ptr: *mut gccjit_sys::gcc_jit_vector_type) -> VectorType<'ctx> {
         VectorType {
             marker: PhantomData,
-            ptr: ptr
+            ptr
         }
     }
 
@@ -67,7 +67,7 @@ impl<'ctx> FunctionPtrType<'ctx> {
     unsafe fn from_ptr(ptr: *mut gccjit_sys::gcc_jit_function_type) -> FunctionPtrType<'ctx> {
         FunctionPtrType {
             marker: PhantomData,
-            ptr: ptr
+            ptr
         }
     }
 
@@ -331,7 +331,7 @@ impl<T> Typeable for *const T {
 pub unsafe fn from_ptr<'ctx>(ptr: *mut gccjit_sys::gcc_jit_type) -> Type<'ctx> {
     Type {
         marker: PhantomData,
-        ptr: ptr
+        ptr
     }
 }
 
