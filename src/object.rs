@@ -67,7 +67,7 @@ impl<'ctx> ToObject<'ctx> for Object<'ctx> {
 pub unsafe fn from_ptr<'ctx>(ptr: *mut gccjit_sys::gcc_jit_object) -> Object<'ctx> {
     Object {
         marker: PhantomData,
-        ptr: ptr
+        ptr
     }
 }
 

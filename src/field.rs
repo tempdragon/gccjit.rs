@@ -33,7 +33,7 @@ impl<'ctx> fmt::Debug for Field<'ctx> {
 pub unsafe fn from_ptr<'ctx>(ptr: *mut gccjit_sys::gcc_jit_field) -> Field<'ctx> {
     Field {
         marker: PhantomData,
-        ptr: ptr
+        ptr
     }
 }
 

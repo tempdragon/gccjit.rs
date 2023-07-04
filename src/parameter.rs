@@ -54,7 +54,7 @@ impl<'ctx> ToLValue<'ctx> for Parameter<'ctx> {
 pub unsafe fn from_ptr<'ctx>(ptr: *mut gccjit_sys::gcc_jit_param) -> Parameter<'ctx> {
     Parameter {
         marker: PhantomData,
-        ptr: ptr
+        ptr
     }
 }
 

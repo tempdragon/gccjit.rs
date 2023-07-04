@@ -30,7 +30,7 @@ impl<'ctx> fmt::Debug for Location<'ctx> {
 pub unsafe fn from_ptr<'ctx>(ptr: *mut gccjit_sys::gcc_jit_location) -> Location<'ctx> {
     Location {
         marker: PhantomData,
-        ptr: ptr
+        ptr
     }
 }
 

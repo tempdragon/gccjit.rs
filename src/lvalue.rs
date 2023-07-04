@@ -35,13 +35,14 @@ impl Visibility {
 
 #[cfg(feature="master")]
 pub enum AttributeValue<'a> {
+    #[allow(dead_code)]
     Int(i32),
     None,
     String(&'a str),
 }
 
 #[cfg(feature="master")]
-#[derive(Clone, Debug)]
+#[derive(Clone, Copy, Debug)]
 pub enum VarAttribute {
     Visibility(Visibility),
 }
@@ -54,8 +55,8 @@ impl VarAttribute {
         }
     }
 
-    fn to_sys(&self) -> gccjit_sys::gcc_jit_variable_attribute {
-        match *self {
+    fn to_sys(self) -> gccjit_sys::gcc_jit_variable_attribute {
+        match self {
             VarAttribute::Visibility(_) => gccjit_sys::gcc_jit_variable_attribute::GCC_JIT_VARIABLE_ATTRIBUTE_VISIBILITY,
         }
     }
@@ -71,10 +72,10 @@ pub enum TlsModel {
 }
 
 impl TlsModel {
-    fn to_sys(&self) -> gccjit_sys::gcc_jit_tls_model {
+    fn to_sys(self) -> gccjit_sys::gcc_jit_tls_model {
         use gccjit_sys::gcc_jit_tls_model::*;
 
-        match *self {
+        match self {
             TlsModel::GlobalDynamic => GCC_JIT_TLS_MODEL_GLOBAL_DYNAMIC,
             TlsModel::LocalDynamic => GCC_JIT_TLS_MODEL_LOCAL_DYNAMIC,
             TlsModel::InitialExec => GCC_JIT_TLS_MODEL_INITIAL_EXEC,
@@ -234,7 +235,7 @@ impl<'ctx> LValue<'ctx> {
 pub unsafe fn from_ptr<'ctx>(ptr: *mut gccjit_sys::gcc_jit_lvalue) -> LValue<'ctx> {
     LValue {
         marker: PhantomData,
-        ptr: ptr
+        ptr
     }
 }
 

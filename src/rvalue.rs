@@ -159,7 +159,7 @@ impl<'ctx> RValue<'ctx> {
 pub unsafe fn from_ptr<'ctx>(ptr: *mut gccjit_sys::gcc_jit_rvalue) -> RValue<'ctx> {
     RValue {
         marker: PhantomData,
-        ptr: ptr
+        ptr
     }
 }
 

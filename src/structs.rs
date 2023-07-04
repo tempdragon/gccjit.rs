@@ -38,7 +38,7 @@ impl<'ctx> Struct<'ctx> {
         };
         let num_fields = fields.len() as i32;
         let mut fields_ptrs : Vec<_> = fields.iter()
-            .map(|x| unsafe { field::get_ptr(&x) })
+            .map(|x| unsafe { field::get_ptr(x) })
             .collect();
         unsafe {
             gccjit_sys::gcc_jit_struct_set_fields(self.ptr,
@@ -97,6 +97,6 @@ impl<'ctx> fmt::Debug for Struct<'ctx> {
 pub unsafe fn from_ptr<'ctx>(ptr: *mut gccjit_sys::gcc_jit_struct) -> Struct<'ctx> {
     Struct {
         marker: PhantomData,
-        ptr: ptr
+        ptr
     }
 }

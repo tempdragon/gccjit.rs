@@ -14,6 +14,8 @@
 //! never outlive the Context object from which they came, a requirement
 //! to using libgccjit correctly.
 
+#![allow(clippy::needless_lifetimes)]
+
 extern crate gccjit_sys;
 
 mod asm;
