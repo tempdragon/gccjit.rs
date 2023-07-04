@@ -70,7 +70,10 @@ jobs:
     - name: Build
       run: |
         cargo build
+        cargo build --features master
         cargo build --examples
 
-    #- name: clippy
-      #run: cargo clippy --all-targets -- -D warnings
+    - name: clippy
+      run: |
+        cargo clippy --all-targets -- -D warnings
+        cargo clippy --all-targets --features master -- -D warnings
