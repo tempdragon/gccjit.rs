@@ -132,6 +132,10 @@ impl<'ctx> RValue<'ctx> {
             let ptr = gccjit_sys::gcc_jit_rvalue_dereference_field(self.ptr,
                                                                    loc_ptr,
                                                                    field::get_ptr(&field));
+            #[cfg(debug_assertions)]
+            if let Ok(Some(error)) = self.to_object().get_context().get_last_error() {
+                panic!("{}", error);
+            }
             lvalue::from_ptr(ptr)
         }
     }
@@ -166,4 +170,3 @@ pub unsafe fn from_ptr<'ctx>(ptr: *mut gccjit_sys::gcc_jit_rvalue) -> RValue<'ct
 pub unsafe fn get_ptr<'ctx>(rvalue: &RValue<'ctx>) -> *mut gccjit_sys::gcc_jit_rvalue {
     rvalue.ptr
 }
-
