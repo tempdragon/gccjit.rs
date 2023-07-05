@@ -21,6 +21,8 @@ use object::{self, Object, ToObject};
 use parameter::{self, Parameter};
 use rvalue::{self, RValue, ToRValue};
 use structs::{self, Struct};
+#[cfg(feature="master")]
+use target_info::{self, TargetInfo};
 use Type;
 use types;
 
@@ -266,6 +268,13 @@ impl<'ctx> Context<'ctx> {
             gccjit_sys::gcc_jit_context_compile_to_file(self.ptr,
                                                         mem::transmute(kind),
                                                         cstr.as_ptr());
+        }
+    }
+
+    #[cfg(feature="master")]
+    pub fn get_target_info(&self) -> TargetInfo {
+        unsafe {
+            target_info::from_ptr(gccjit_sys::gcc_jit_context_get_target_info(self.ptr))
         }
     }
 

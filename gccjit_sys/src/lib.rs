@@ -21,6 +21,7 @@ pub enum gcc_jit_case {}
 pub enum gcc_jit_function_type {}
 pub enum gcc_jit_vector_type {}
 pub enum gcc_jit_extended_asm {}
+pub enum gcc_jit_target_info {}
 
 #[repr(C)]
 pub enum gcc_jit_tls_model {
@@ -625,4 +626,19 @@ extern {
 
     #[cfg(feature="master")]
     pub fn gcc_jit_set_global_personality_function_name(name: *const c_char);
+
+    #[cfg(feature="master")]
+    pub fn gcc_jit_context_get_target_info(ctxt: *mut gcc_jit_context) -> *mut gcc_jit_target_info;
+
+    #[cfg(feature="master")]
+    pub fn gcc_jit_target_info_release(info: *mut gcc_jit_target_info);
+
+    #[cfg(feature="master")]
+    pub fn gcc_jit_target_info_cpu_supports(info: *mut gcc_jit_target_info, feature: *const c_char) -> c_int;
+
+    #[cfg(feature="master")]
+    pub fn gcc_jit_target_info_arch(info: *mut gcc_jit_target_info) -> *const c_char;
+
+    #[cfg(feature="master")]
+    pub fn gcc_jit_target_info_supports_128bit_int(info: *mut gcc_jit_target_info) -> c_int;
 }

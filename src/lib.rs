@@ -30,6 +30,8 @@ mod rvalue;
 mod parameter;
 mod function;
 mod block;
+#[cfg(feature="master")]
+mod target_info;
 
 pub use context::Context;
 pub use context::CType;
@@ -54,6 +56,8 @@ pub use parameter::Parameter;
 pub use function::FnAttribute;
 pub use function::{Function, FunctionType};
 pub use block::{Block, BinaryOp, UnaryOp, ComparisonOp};
+#[cfg(feature="master")]
+pub use target_info::TargetInfo;
 
 #[cfg(feature="master")]
 pub fn set_global_personality_function_name(name: &'static [u8]) {
