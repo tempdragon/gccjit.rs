@@ -1,4 +1,4 @@
-use std::{ffi::CStr, fmt};
+use std::{ffi::{CStr, CString}, fmt};
 
 pub struct TargetInfo {
     ptr: *mut gccjit_sys::gcc_jit_target_info,
@@ -14,10 +14,14 @@ impl fmt::Debug for TargetInfo {
 }
 
 impl TargetInfo {
-    pub fn cpu_supports(&self, feature: &[u8]) -> bool {
-        debug_assert!(feature.ends_with(&[b'\0']), "Expecting a NUL-terminated C string");
+    pub fn cpu_supports(&self, feature: &str) -> bool {
+        let feature =
+            match CString::new(feature) {
+                Ok(feature) => feature,
+                Err(_) => return false,
+            };
         unsafe {
-            gccjit_sys::gcc_jit_target_info_cpu_supports(self.ptr, feature.as_ptr() as *const _) != 0
+            gccjit_sys::gcc_jit_target_info_cpu_supports(self.ptr, feature.as_ptr()) != 0
         }
     }
 
