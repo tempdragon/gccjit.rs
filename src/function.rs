@@ -57,6 +57,7 @@ pub enum FnAttribute<'a> {
     Visibility(Visibility),
     Cold,
     ReturnsTwice,
+    Pure,
 }
 
 #[cfg(feature="master")]
@@ -70,7 +71,8 @@ impl<'a> FnAttribute<'a> {
             | FnAttribute::NoInline
             | FnAttribute::Used
             | FnAttribute::Cold
-            | FnAttribute::ReturnsTwice => AttributeValue::None,
+            | FnAttribute::ReturnsTwice
+            | FnAttribute::Pure => AttributeValue::None,
         }
     }
 
@@ -84,6 +86,7 @@ impl<'a> FnAttribute<'a> {
             FnAttribute::Visibility(_) => gccjit_sys::gcc_jit_fn_attribute::GCC_JIT_FN_ATTRIBUTE_VISIBILITY,
             FnAttribute::Cold => gccjit_sys::gcc_jit_fn_attribute::GCC_JIT_FN_ATTRIBUTE_COLD,
             FnAttribute::ReturnsTwice => gccjit_sys::gcc_jit_fn_attribute::GCC_JIT_FN_ATTRIBUTE_RETURNS_TWICE,
+            FnAttribute::Pure => gccjit_sys::gcc_jit_fn_attribute::GCC_JIT_FN_ATTRIBUTE_PURE,
         }
     }
 }
