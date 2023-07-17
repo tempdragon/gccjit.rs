@@ -266,6 +266,7 @@ pub enum gcc_jit_fn_attribute
     GCC_JIT_FN_ATTRIBUTE_VISIBILITY,
     GCC_JIT_FN_ATTRIBUTE_COLD,
     GCC_JIT_FN_ATTRIBUTE_RETURNS_TWICE,
+    GCC_JIT_FN_ATTRIBUTE_PURE,
 }
 
 #[cfg(feature="master")]
