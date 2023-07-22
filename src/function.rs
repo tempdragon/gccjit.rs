@@ -58,6 +58,7 @@ pub enum FnAttribute<'a> {
     Cold,
     ReturnsTwice,
     Pure,
+    Const,
 }
 
 #[cfg(feature="master")]
@@ -72,7 +73,8 @@ impl<'a> FnAttribute<'a> {
             | FnAttribute::Used
             | FnAttribute::Cold
             | FnAttribute::ReturnsTwice
-            | FnAttribute::Pure => AttributeValue::None,
+            | FnAttribute::Pure
+            | FnAttribute::Const => AttributeValue::None,
         }
     }
 
@@ -87,6 +89,7 @@ impl<'a> FnAttribute<'a> {
             FnAttribute::Cold => gccjit_sys::gcc_jit_fn_attribute::GCC_JIT_FN_ATTRIBUTE_COLD,
             FnAttribute::ReturnsTwice => gccjit_sys::gcc_jit_fn_attribute::GCC_JIT_FN_ATTRIBUTE_RETURNS_TWICE,
             FnAttribute::Pure => gccjit_sys::gcc_jit_fn_attribute::GCC_JIT_FN_ATTRIBUTE_PURE,
+            FnAttribute::Const => gccjit_sys::gcc_jit_fn_attribute::GCC_JIT_FN_ATTRIBUTE_CONST,
         }
     }
 }
