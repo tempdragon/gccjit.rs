@@ -258,6 +258,7 @@ pub enum gcc_jit_comparison
 #[repr(C)]
 pub enum gcc_jit_fn_attribute
 {
+    GCC_JIT_FN_ATTRIBUTE_ALIAS,
     GCC_JIT_FN_ATTRIBUTE_ALWAYS_INLINE,
     GCC_JIT_FN_ATTRIBUTE_INLINE,
     GCC_JIT_FN_ATTRIBUTE_NOINLINE,
@@ -268,6 +269,7 @@ pub enum gcc_jit_fn_attribute
     GCC_JIT_FN_ATTRIBUTE_RETURNS_TWICE,
     GCC_JIT_FN_ATTRIBUTE_PURE,
     GCC_JIT_FN_ATTRIBUTE_CONST,
+    GCC_JIT_FN_ATTRIBUTE_WEAK,
 }
 
 #[cfg(feature="master")]

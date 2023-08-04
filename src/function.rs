@@ -49,6 +49,7 @@ pub enum FunctionType {
 #[cfg(feature="master")]
 #[derive(Clone, Debug)]
 pub enum FnAttribute<'a> {
+    Alias(&'a str),
     AlwaysInline,
     Inline,
     NoInline,
@@ -59,13 +60,14 @@ pub enum FnAttribute<'a> {
     ReturnsTwice,
     Pure,
     Const,
+    Weak,
 }
 
 #[cfg(feature="master")]
 impl<'a> FnAttribute<'a> {
     fn get_value(&self) -> AttributeValue {
         match *self {
-            FnAttribute::Target(target) => AttributeValue::String(target),
+            FnAttribute::Alias(value) | FnAttribute::Target(value) => AttributeValue::String(value),
             FnAttribute::Visibility(visibility) => AttributeValue::String(visibility.as_str()),
             FnAttribute::AlwaysInline
             | FnAttribute::Inline
@@ -74,12 +76,14 @@ impl<'a> FnAttribute<'a> {
             | FnAttribute::Cold
             | FnAttribute::ReturnsTwice
             | FnAttribute::Pure
-            | FnAttribute::Const => AttributeValue::None,
+            | FnAttribute::Const
+            | FnAttribute::Weak => AttributeValue::None,
         }
     }
 
     fn as_sys(&self) -> gccjit_sys::gcc_jit_fn_attribute {
         match *self {
+            FnAttribute::Alias(_) => gccjit_sys::gcc_jit_fn_attribute::GCC_JIT_FN_ATTRIBUTE_ALIAS,
             FnAttribute::AlwaysInline => gccjit_sys::gcc_jit_fn_attribute::GCC_JIT_FN_ATTRIBUTE_ALWAYS_INLINE,
             FnAttribute::Inline => gccjit_sys::gcc_jit_fn_attribute::GCC_JIT_FN_ATTRIBUTE_INLINE,
             FnAttribute::NoInline => gccjit_sys::gcc_jit_fn_attribute::GCC_JIT_FN_ATTRIBUTE_NOINLINE,
@@ -90,6 +94,7 @@ impl<'a> FnAttribute<'a> {
             FnAttribute::ReturnsTwice => gccjit_sys::gcc_jit_fn_attribute::GCC_JIT_FN_ATTRIBUTE_RETURNS_TWICE,
             FnAttribute::Pure => gccjit_sys::gcc_jit_fn_attribute::GCC_JIT_FN_ATTRIBUTE_PURE,
             FnAttribute::Const => gccjit_sys::gcc_jit_fn_attribute::GCC_JIT_FN_ATTRIBUTE_CONST,
+            FnAttribute::Weak => gccjit_sys::gcc_jit_fn_attribute::GCC_JIT_FN_ATTRIBUTE_WEAK,
         }
     }
 }
