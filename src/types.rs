@@ -137,6 +137,15 @@ impl<'ctx> Type<'ctx> {
         }
     }
 
+    /// Given a type T, creates a new type of restrict T, which
+    /// has the semantics of C's restrict.
+    #[cfg(feature="master")]
+    pub fn make_restrict(self) -> Type<'ctx> {
+        unsafe {
+            from_ptr(gccjit_sys::gcc_jit_type_get_restrict(self.ptr))
+        }
+    }
+
     pub fn get_aligned(self, alignment_in_bytes: u64) -> Type<'ctx> {
         unsafe {
             from_ptr(gccjit_sys::gcc_jit_type_get_aligned(self.ptr, alignment_in_bytes as _))

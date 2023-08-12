@@ -336,6 +336,8 @@ extern {
     pub fn gcc_jit_type_get_pointer(ty: *mut gcc_jit_type) -> *mut gcc_jit_type;
     pub fn gcc_jit_type_get_const(ty: *mut gcc_jit_type) -> *mut gcc_jit_type;
     pub fn gcc_jit_type_get_volatile(ty: *mut gcc_jit_type) -> *mut gcc_jit_type;
+    #[cfg(feature="master")]
+    pub fn gcc_jit_type_get_restrict(ty: *mut gcc_jit_type) -> *mut gcc_jit_type;
     pub fn gcc_jit_context_new_array_type(ctx: *mut gcc_jit_context,
                                           loc: *mut gcc_jit_location,
                                           ty: *mut gcc_jit_type,
