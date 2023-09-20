@@ -1032,6 +1032,20 @@ impl<'ctx> Context<'ctx> {
         }
     }
 
+    #[cfg(feature="master")]
+    /// Creates a new RValue from a sizeof(type).
+    pub fn new_sizeof<'a>(&'a self, ty: types::Type<'a>) -> RValue<'a> {
+
+        unsafe {
+            let ptr = gccjit_sys::gcc_jit_context_new_sizeof(self.ptr, types::get_ptr(&ty));
+            #[cfg(debug_assertions)]
+            if let Ok(Some(error)) = self.get_last_error() {
+                panic!("{}", error);
+            }
+            rvalue::from_ptr(ptr)
+        }
+    }
+
     /// Dumps a small C file to the path that can be used to reproduce a series
     /// of API calls. You should only ever need to call this if you are debugging
     /// an issue in gccjit itself or this library.
