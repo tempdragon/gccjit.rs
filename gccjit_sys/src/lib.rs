@@ -648,4 +648,7 @@ extern {
 
     #[cfg(feature="master")]
     pub fn gcc_jit_target_info_supports_128bit_int(info: *mut gcc_jit_target_info) -> c_int;
+
+    #[cfg(feature="master")]
+    pub fn gcc_jit_context_new_sizeof(ctxt: *mut gcc_jit_context, typ: *mut gcc_jit_type) -> *mut gcc_jit_rvalue;
 }
