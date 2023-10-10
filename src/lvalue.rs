@@ -12,8 +12,6 @@ use field;
 use location::Location;
 use location;
 
-use gccjit_sys::libc::c_int;
-
 #[cfg(feature="master")]
 #[derive(Clone, Copy, Debug)]
 pub enum Visibility {
@@ -41,7 +39,7 @@ pub enum AttributeValue<'a> {
     Int(i32),
     None,
     String(&'a str),
-    IntArray(&'a [c_int]),
+    IntArray(&'a [std::ffi::c_int]),
 }
 
 #[cfg(feature="master")]

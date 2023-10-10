@@ -3,7 +3,6 @@ use std::fmt;
 use std::ptr;
 
 use gccjit_sys;
-use gccjit_sys::libc::c_int;
 
 use block::Block;
 use block;
@@ -62,7 +61,7 @@ pub enum FnAttribute<'a> {
     Pure,
     Const,
     Weak,
-    NonNull(Vec<c_int>),
+    NonNull(Vec<std::ffi::c_int>),
 }
 
 #[cfg(feature="master")]
@@ -80,7 +79,13 @@ impl<'a> FnAttribute<'a> {
             | FnAttribute::Pure
             | FnAttribute::Const
             | FnAttribute::Weak => AttributeValue::None,
-            FnAttribute::NonNull(ref value) => AttributeValue::IntArray(value),
+            FnAttribute::NonNull(ref value) => {
+                debug_assert!(
+                    value.iter().all(|attr| *attr > 0),
+                    "all values must be > 0 for non-null attribute",
+                );
+                AttributeValue::IntArray(value)
+            }
         }
     }
 
