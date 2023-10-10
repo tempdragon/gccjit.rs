@@ -3,6 +3,7 @@ use std::fmt;
 use std::ptr;
 
 use gccjit_sys;
+use gccjit_sys::libc::c_int;
 
 use block::Block;
 use block;
@@ -61,7 +62,7 @@ pub enum FnAttribute<'a> {
     Pure,
     Const,
     Weak,
-    NonNull(Vec<i32>),
+    NonNull(Vec<c_int>),
 }
 
 #[cfg(feature="master")]

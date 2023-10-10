@@ -1,6 +1,7 @@
 #![allow(non_camel_case_types)]
 
-extern crate libc;
+// Re-export libc to use the same version in `gccjit-rs`.
+pub extern crate libc;
 
 use libc::{c_char, c_int, FILE, c_void, c_long, c_double, c_ulong, size_t, ssize_t};
 
