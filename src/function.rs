@@ -61,6 +61,7 @@ pub enum FnAttribute<'a> {
     Pure,
     Const,
     Weak,
+    NonNull(Vec<std::ffi::c_int>),
 }
 
 #[cfg(feature="master")]
@@ -78,6 +79,13 @@ impl<'a> FnAttribute<'a> {
             | FnAttribute::Pure
             | FnAttribute::Const
             | FnAttribute::Weak => AttributeValue::None,
+            FnAttribute::NonNull(ref value) => {
+                debug_assert!(
+                    value.iter().all(|attr| *attr > 0),
+                    "all values must be > 0 for non-null attribute",
+                );
+                AttributeValue::IntArray(value)
+            }
         }
     }
 
@@ -95,6 +103,7 @@ impl<'a> FnAttribute<'a> {
             FnAttribute::Pure => gccjit_sys::gcc_jit_fn_attribute::GCC_JIT_FN_ATTRIBUTE_PURE,
             FnAttribute::Const => gccjit_sys::gcc_jit_fn_attribute::GCC_JIT_FN_ATTRIBUTE_CONST,
             FnAttribute::Weak => gccjit_sys::gcc_jit_fn_attribute::GCC_JIT_FN_ATTRIBUTE_WEAK,
+            FnAttribute::NonNull(_) => gccjit_sys::gcc_jit_fn_attribute::GCC_JIT_FN_ATTRIBUTE_NONNULL,
         }
     }
 }
@@ -208,7 +217,29 @@ impl<'ctx> Function<'ctx> {
     pub fn add_attribute<'a>(&self, attribute: FnAttribute<'a>) {
         let value = attribute.get_value();
         match value {
-            AttributeValue::Int(_) => unimplemented!(),
+            AttributeValue::Int(value) => {
+                // Basically the same as `IntArray` but for only one element.
+                let value = &[value];
+                unsafe {
+                    gccjit_sys::gcc_jit_function_add_integer_array_attribute(
+                        self.ptr,
+                        attribute.as_sys(),
+                        value.as_ptr(),
+                        value.len() as _,
+                    );
+                }
+
+            }
+            AttributeValue::IntArray(value) => {
+                unsafe {
+                    gccjit_sys::gcc_jit_function_add_integer_array_attribute(
+                        self.ptr,
+                        attribute.as_sys(),
+                        value.as_ptr(),
+                        value.len() as _,
+                    );
+                }
+            }
             AttributeValue::None => {
                 unsafe {
                     gccjit_sys::gcc_jit_function_add_attribute(self.ptr, attribute.as_sys());

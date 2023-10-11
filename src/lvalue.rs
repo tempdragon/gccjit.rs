@@ -39,6 +39,7 @@ pub enum AttributeValue<'a> {
     Int(i32),
     None,
     String(&'a str),
+    IntArray(&'a [std::ffi::c_int]),
 }
 
 #[cfg(feature="master")]
@@ -51,7 +52,7 @@ pub enum VarAttribute {
 impl VarAttribute {
     fn get_value(&self) -> AttributeValue {
         match *self {
-            VarAttribute::Visibility(visibility) => AttributeValue::String(visibility.as_str()),
+            Self::Visibility(visibility) => AttributeValue::String(visibility.as_str()),
         }
     }
 
@@ -221,6 +222,7 @@ impl<'ctx> LValue<'ctx> {
         let value = attribute.get_value();
         match value {
             AttributeValue::Int(_) => unimplemented!(),
+            AttributeValue::IntArray(_) => unimplemented!(),
             AttributeValue::None => unimplemented!(),
             AttributeValue::String(string) => {
                 let cstr = CString::new(string).unwrap();
