@@ -655,4 +655,7 @@ extern {
 
     #[cfg(feature="master")]
     pub fn gcc_jit_context_new_sizeof(ctxt: *mut gcc_jit_context, typ: *mut gcc_jit_type) -> *mut gcc_jit_rvalue;
+
+    #[cfg(feature="master")]
+    pub fn gcc_jit_context_set_output_ident(ctxt: *mut gcc_jit_context, output_ident: *const c_char);
 }
