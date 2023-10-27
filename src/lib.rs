@@ -66,3 +66,22 @@ pub fn set_global_personality_function_name(name: &'static [u8]) {
         gccjit_sys::gcc_jit_set_global_personality_function_name(name.as_ptr() as *const _);
     }
 }
+
+#[derive(Debug)]
+pub struct Version {
+    pub major: i32,
+    pub minor: i32,
+    pub patch: i32,
+}
+
+impl Version {
+    pub fn get() -> Self {
+        unsafe {
+            Self {
+                major: gccjit_sys::gcc_jit_version_major(),
+                minor: gccjit_sys::gcc_jit_version_minor(),
+                patch: gccjit_sys::gcc_jit_version_patchlevel(),
+            }
+        }
+    }
+}
