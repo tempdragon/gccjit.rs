@@ -658,4 +658,8 @@ extern {
 
     #[cfg(feature="master")]
     pub fn gcc_jit_context_set_output_ident(ctxt: *mut gcc_jit_context, output_ident: *const c_char);
+
+    pub fn gcc_jit_version_major() -> c_int;
+    pub fn gcc_jit_version_minor() -> c_int;
+    pub fn gcc_jit_version_patchlevel() -> c_int;
 }
