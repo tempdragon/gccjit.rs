@@ -194,6 +194,14 @@ impl<'ctx> Context<'ctx> {
         }
     }
 
+    #[cfg(feature="master")]
+    pub fn set_output_ident(&self, ident: &str) {
+        let c_str = CString::new(ident).unwrap();
+        unsafe {
+            gccjit_sys::gcc_jit_context_set_output_ident(self.ptr, c_str.as_ptr());
+        }
+    }
+
     pub fn set_debug_info(&self, value: bool) {
         unsafe {
             gccjit_sys::gcc_jit_context_set_bool_option(self.ptr,
