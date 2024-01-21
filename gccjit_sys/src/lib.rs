@@ -662,4 +662,7 @@ extern {
     pub fn gcc_jit_version_major() -> c_int;
     pub fn gcc_jit_version_minor() -> c_int;
     pub fn gcc_jit_version_patchlevel() -> c_int;
+
+    #[cfg(feature="master")]
+    pub fn gcc_jit_function_new_temp(func: *mut gcc_jit_function, loc: *mut gcc_jit_location, ty: *mut gcc_jit_type) -> *mut gcc_jit_lvalue;
 }

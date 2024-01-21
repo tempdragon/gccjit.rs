@@ -214,6 +214,22 @@ impl<'ctx> Function<'ctx> {
     }
 
     #[cfg(feature="master")]
+    pub fn new_temp(&self, loc: Option<Location<'ctx>>, ty: Type<'ctx>) -> LValue<'ctx> {
+        unsafe {
+            let loc_ptr = match loc {
+                Some(loc) => location::get_ptr(&loc),
+                None => ptr::null_mut()
+            };
+            let ptr = gccjit_sys::gcc_jit_function_new_temp(self.ptr, loc_ptr, types::get_ptr(&ty));
+            #[cfg(debug_assertions)]
+            if let Ok(Some(error)) = self.to_object().get_context().get_last_error() {
+                panic!("{} ({:?})", error, self);
+            }
+            lvalue::from_ptr(ptr)
+        }
+    }
+
+    #[cfg(feature="master")]
     pub fn add_attribute<'a>(&self, attribute: FnAttribute<'a>) {
         let value = attribute.get_value();
         match value {
