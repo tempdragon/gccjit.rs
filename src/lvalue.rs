@@ -218,7 +218,7 @@ impl<'ctx> LValue<'ctx> {
     }
 
     #[cfg(feature="master")]
-    pub fn add_attribute(&self, attribute: VarAttribute) {
+    pub fn add_string_attribute(&self, attribute: VarAttribute) {
         let value = attribute.get_value();
         match value {
             AttributeValue::Int(_) => unimplemented!(),
@@ -227,7 +227,7 @@ impl<'ctx> LValue<'ctx> {
             AttributeValue::String(string) => {
                 let cstr = CString::new(string).unwrap();
                 unsafe {
-                    gccjit_sys::gcc_jit_lvalue_add_attribute(self.ptr, attribute.to_sys(), cstr.as_ptr());
+                    gccjit_sys::gcc_jit_lvalue_add_string_attribute(self.ptr, attribute.to_sys(), cstr.as_ptr());
                 }
             },
         }

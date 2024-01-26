@@ -624,7 +624,7 @@ extern {
     pub fn gcc_jit_function_add_integer_array_attribute(func: *mut gcc_jit_function, attribute: gcc_jit_fn_attribute, value: *const c_int, length: size_t);
 
     #[cfg(feature="master")]
-    pub fn gcc_jit_lvalue_add_attribute(variable: *mut gcc_jit_lvalue, attribute: gcc_jit_variable_attribute, value: *const c_char);
+    pub fn gcc_jit_lvalue_add_string_attribute(variable: *mut gcc_jit_lvalue, attribute: gcc_jit_variable_attribute, value: *const c_char);
 
     #[cfg(feature="master")]
     pub fn gcc_jit_block_add_try_catch(block: *mut gcc_jit_block, loc: *mut gcc_jit_location, try_block: *mut gcc_jit_block, catch_block: *mut gcc_jit_block);
