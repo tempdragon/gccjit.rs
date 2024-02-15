@@ -202,6 +202,13 @@ impl<'ctx> Context<'ctx> {
         }
     }
 
+    #[cfg(feature="master")]
+    pub fn set_allow_special_chars_in_func_names(&self, value: bool) {
+        unsafe {
+            gccjit_sys::gcc_jit_context_set_bool_option(self.ptr, GCC_JIT_BOOL_OPTION_SPECIAL_CHARS_IN_FUNC_NAMES, value as i32);
+        }
+    }
+
     pub fn set_debug_info(&self, value: bool) {
         unsafe {
             gccjit_sys::gcc_jit_context_set_bool_option(self.ptr,
