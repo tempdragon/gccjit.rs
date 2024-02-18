@@ -666,4 +666,8 @@ extern {
 
     #[cfg(feature="master")]
     pub fn gcc_jit_function_new_temp(func: *mut gcc_jit_function, loc: *mut gcc_jit_location, ty: *mut gcc_jit_type) -> *mut gcc_jit_lvalue;
+
+    #[cfg(feature="master")]
+    pub fn gcc_jit_rvalue_set_location(rvalue: *mut gcc_jit_rvalue,
+                                       loc: *mut gcc_jit_location);
 }
