@@ -1,4 +1,3 @@
-use gccjit_sys;
 use std::marker::PhantomData;
 use std::fmt;
 use context::Context;

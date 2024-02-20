@@ -3,7 +3,6 @@ use std::fmt;
 use std::ptr;
 use std::mem;
 use std::ops::{Add, Sub, Mul, Div, Rem, BitAnd, BitOr, BitXor, Shl, Shr};
-use gccjit_sys;
 use context::Context;
 use object::{ToObject, Object};
 use object;

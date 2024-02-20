@@ -1,8 +1,6 @@
 use std::marker::PhantomData;
 use std::fmt;
 
-use gccjit_sys;
-
 use context::Context;
 use context;
 use object;

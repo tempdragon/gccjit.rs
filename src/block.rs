@@ -8,7 +8,6 @@ use std::os::raw::c_int;
 use asm::ExtendedAsm;
 use block;
 use context::{Case, Context};
-use gccjit_sys;
 use object::{self, ToObject, Object};
 use function::{self, Function};
 use location::{self, Location};
@@ -280,6 +279,10 @@ impl<'ctx> Block<'ctx> {
         unsafe {
             gccjit_sys::gcc_jit_block_end_with_void_return(self.ptr,
                                                            loc_ptr);
+        }
+        #[cfg(debug_assertions)]
+        if let Ok(Some(error)) = self.to_object().get_context().get_last_error() {
+            panic!("{}", error);
         }
     }
 

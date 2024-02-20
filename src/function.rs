@@ -2,8 +2,6 @@ use std::marker::PhantomData;
 use std::fmt;
 use std::ptr;
 
-use gccjit_sys;
-
 use block::Block;
 use block;
 use context::Context;

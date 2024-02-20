@@ -1,7 +1,6 @@
 use std::{ffi::CString, marker::PhantomData};
 use std::fmt;
 use std::ptr;
-use gccjit_sys;
 use context::Context;
 use rvalue::{RValue, ToRValue};
 use rvalue;

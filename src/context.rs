@@ -1,5 +1,3 @@
-use std::default::Default;
-use std::ops::Drop;
 use std::ffi::{CStr, CString};
 use std::marker::PhantomData;
 use std::mem;
@@ -7,7 +5,6 @@ use std::os::raw::{c_int, c_ulong};
 use std::ptr;
 use std::str::Utf8Error;
 
-use gccjit_sys;
 use gccjit_sys::gcc_jit_int_option::*;
 use gccjit_sys::gcc_jit_str_option::*;
 use gccjit_sys::gcc_jit_bool_option::*;
