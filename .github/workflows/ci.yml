@@ -22,27 +22,13 @@ jobs:
           override: true
           components: clippy
 
-      - name: Download artifact
-        uses: dawidd6/action-download-artifact@v2
-        with:
-          workflow: main.yml
-          name: "libgccjit.so"
-          path: gcc-build
-          repo: antoyo/gcc
-          branch: "master"
-          event: push
-          search_artifacts: true # Because, instead, the action only check the last job ran and that won't work since we want multiple artifacts.
-
-      - name: Setup path to libgccjit
+      - name: Download and install GCC fork
         run: |
-          echo $(readlink -f gcc-build) > gcc_path
-          # NOTE: the filename is still libgccjit.so even when the artifact name is different.
-          ln gcc-build/libgccjit.so gcc-build/libgccjit.so.0
+          curl -LO https://github.com/antoyo/gcc/releases/latest/download/gcc-13.deb
+          sudo dpkg --force-overwrite -i gcc-13.deb
 
       - name: Set env
         run: |
-          echo "LIBRARY_PATH=$(cat gcc_path)" >> $GITHUB_ENV
-          echo "LD_LIBRARY_PATH=$(cat gcc_path)" >> $GITHUB_ENV
           echo "workspace="$GITHUB_WORKSPACE >> $GITHUB_ENV
 
       - name: Cache cargo registry
@@ -68,6 +54,11 @@ jobs:
           cargo build
           cargo build --features master
           cargo build --examples
+
+      - name: Test
+        run: |
+          cd examples/factorial
+          cargo build
 
       - name: clippy
         run: |
