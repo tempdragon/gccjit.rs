@@ -1215,7 +1215,6 @@ pub unsafe fn from_ptr<'ctx>(ptr: *mut gccjit_sys::gcc_jit_context) -> Context<'
 #[cfg(test)]
 mod tests {
     use super::super::*;
-    use std::default::Default;
     use std::mem;
 
     #[test]

@@ -27,10 +27,10 @@ impl<'ctx> fmt::Debug for Location<'ctx> {
 }
 
 impl<'ctx> Location<'ctx> {
-    pub fn null<'a>() -> Self {
+    pub fn null() -> Self {
         Location {
             marker: std::marker::PhantomData,
-            ptr: unsafe { core::ptr::null_mut() },
+            ptr: core::ptr::null_mut(),
         }
     }
 }
