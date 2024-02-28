@@ -103,7 +103,7 @@ impl<'ctx> RValue<'ctx> {
 
     /// Sets the location of this RValue.
     #[cfg(feature="master")]
-    pub unsafe fn set_location(&self, loc: Location) {
+    pub fn set_location(&self, loc: Location) {
         unsafe {
             let loc_ptr = location::get_ptr(&loc);
             gccjit_sys::gcc_jit_rvalue_set_location(self.ptr, loc_ptr);
