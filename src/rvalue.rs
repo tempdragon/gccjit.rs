@@ -101,6 +101,15 @@ impl<'ctx> RValue<'ctx> {
         }
     }
 
+    /// Sets the location of this RValue.
+    #[cfg(feature="master")]
+    pub fn set_location(&self, loc: Location) {
+        unsafe {
+            let loc_ptr = location::get_ptr(&loc);
+            gccjit_sys::gcc_jit_rvalue_set_location(self.ptr, loc_ptr);
+        }
+    }
+
     /// Given an RValue x and a Field f, returns an RValue representing
     /// C's x.f.
     pub fn access_field(&self,

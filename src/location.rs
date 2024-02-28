@@ -26,6 +26,15 @@ impl<'ctx> fmt::Debug for Location<'ctx> {
     }
 }
 
+impl<'ctx> Location<'ctx> {
+    pub fn null() -> Self {
+        Location {
+            marker: std::marker::PhantomData,
+            ptr: core::ptr::null_mut(),
+        }
+    }
+}
+
 pub unsafe fn from_ptr<'ctx>(ptr: *mut gccjit_sys::gcc_jit_location) -> Location<'ctx> {
     Location {
         marker: PhantomData,
