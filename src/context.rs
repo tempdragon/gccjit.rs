@@ -200,9 +200,10 @@ impl<'ctx> Context<'ctx> {
     }
 
     #[cfg(feature="master")]
-    pub fn set_allow_special_chars_in_func_names(&self, value: bool) {
+    pub fn set_special_chars_allowed_in_func_names(&self, value: &str) {
+        let c_str = CString::new(value).unwrap();
         unsafe {
-            gccjit_sys::gcc_jit_context_set_bool_option(self.ptr, GCC_JIT_BOOL_OPTION_SPECIAL_CHARS_IN_FUNC_NAMES, value as i32);
+            gccjit_sys::gcc_jit_context_set_str_option(self.ptr, GCC_JIT_STR_OPTION_SPECIAL_CHARS_IN_FUNC_NAMES, c_str.as_ptr());
         }
     }
 
