@@ -215,6 +215,14 @@ impl<'ctx> Context<'ctx> {
         }
     }
 
+    pub fn set_mangled_function_name(&self, value:bool){
+        unsafe {
+            gccjit_sys::gcc_jit_context_set_bool_option(self.ptr,
+                                                        GCC_JIT_BOOL_OPTION_MANGLED_FUNCTION_NAME,
+                                                        value as i32);
+        }
+    }
+
     pub fn set_keep_intermediates(&self, value: bool) {
         unsafe {
             gccjit_sys::gcc_jit_context_set_bool_option(self.ptr,
