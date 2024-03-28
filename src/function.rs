@@ -60,6 +60,7 @@ pub enum FnAttribute<'a> {
     Const,
     Weak,
     NonNull(Vec<std::ffi::c_int>),
+    JITDwarfShortName(String)
 }
 
 #[cfg(feature="master")]
@@ -84,6 +85,9 @@ impl<'a> FnAttribute<'a> {
                 );
                 AttributeValue::IntArray(value)
             }
+            FnAttribute::JITDwarfShortName(ref value) => {
+                AttributeValue::String(value)
+            }
         }
     }
 
@@ -102,6 +106,7 @@ impl<'a> FnAttribute<'a> {
             FnAttribute::Const => gccjit_sys::gcc_jit_fn_attribute::GCC_JIT_FN_ATTRIBUTE_CONST,
             FnAttribute::Weak => gccjit_sys::gcc_jit_fn_attribute::GCC_JIT_FN_ATTRIBUTE_WEAK,
             FnAttribute::NonNull(_) => gccjit_sys::gcc_jit_fn_attribute::GCC_JIT_FN_ATTRIBUTE_NONNULL,
+            FnAttribute::JITDwarfShortName(_) => gccjit_sys::gcc_jit_fn_attribute::GCC_JIT_FN_ATTRIBUTE_JIT_DWARF_SHORT_NAME,
         }
     }
 }
