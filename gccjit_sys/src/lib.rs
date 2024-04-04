@@ -670,4 +670,7 @@ extern {
     #[cfg(feature="master")]
     pub fn gcc_jit_rvalue_set_location(rvalue: *mut gcc_jit_rvalue,
                                        loc: *mut gcc_jit_location);
+
+    #[cfg(feature="master")]
+    pub fn gcc_jit_context_new_alignof(ctxt: *mut gcc_jit_context, typ: *mut gcc_jit_type) -> *mut gcc_jit_rvalue;
 }
