@@ -1048,9 +1048,21 @@ impl<'ctx> Context<'ctx> {
     #[cfg(feature="master")]
     /// Creates a new RValue from a sizeof(type).
     pub fn new_sizeof<'a>(&'a self, ty: types::Type<'a>) -> RValue<'a> {
-
         unsafe {
             let ptr = gccjit_sys::gcc_jit_context_new_sizeof(self.ptr, types::get_ptr(&ty));
+            #[cfg(debug_assertions)]
+            if let Ok(Some(error)) = self.get_last_error() {
+                panic!("{}", error);
+            }
+            rvalue::from_ptr(ptr)
+        }
+    }
+
+    #[cfg(feature="master")]
+    /// Creates a new RValue from a _Alignof(type).
+    pub fn new_alignof<'a>(&'a self, ty: types::Type<'a>) -> RValue<'a> {
+        unsafe {
+            let ptr = gccjit_sys::gcc_jit_context_new_alignof(self.ptr, types::get_ptr(&ty));
             #[cfg(debug_assertions)]
             if let Ok(Some(error)) = self.get_last_error() {
                 panic!("{}", error);
