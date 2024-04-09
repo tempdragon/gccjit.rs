@@ -120,6 +120,10 @@ pub enum gcc_jit_types {
     GCC_JIT_TYPE_INT128_T,
 
     GCC_JIT_TYPE_BFLOAT16,
+    GCC_JIT_TYPE_FLOAT16,
+    GCC_JIT_TYPE_FLOAT32,
+    GCC_JIT_TYPE_FLOAT64,
+    GCC_JIT_TYPE_FLOAT128,
 }
 
 #[repr(C)]

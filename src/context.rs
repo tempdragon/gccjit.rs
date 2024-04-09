@@ -1320,6 +1320,10 @@ pub enum CType {
     UInt128t,
     ConstCharPtr,
     BFloat16,
+    Float16,
+    Float32,
+    Float64,
+    Float128,
 }
 
 impl CType {
@@ -1353,6 +1357,10 @@ impl CType {
             UInt128t => GCC_JIT_TYPE_UINT128_T,
             ConstCharPtr => GCC_JIT_TYPE_CONST_CHAR_PTR,
             BFloat16 => GCC_JIT_TYPE_BFLOAT16,
+            Float16 => GCC_JIT_TYPE_FLOAT16,
+            Float32 => GCC_JIT_TYPE_FLOAT32,
+            Float64 => GCC_JIT_TYPE_FLOAT64,
+            Float128 => GCC_JIT_TYPE_FLOAT128,
         }
     }
 }
