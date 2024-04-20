@@ -135,6 +135,10 @@ impl<'ctx> Function<'ctx> {
     pub fn get_param(&self, idx: i32) -> Parameter<'ctx> {
         unsafe {
             let ptr = gccjit_sys::gcc_jit_function_get_param(self.ptr, idx);
+            #[cfg(debug_assertions)]
+            if let Ok(Some(error)) = self.to_object().get_context().get_last_error() {
+                panic!("{} ({:?})", error, self);
+            }
             parameter::from_ptr(ptr)
         }
     }
