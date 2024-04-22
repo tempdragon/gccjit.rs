@@ -172,6 +172,12 @@ impl<'ctx> Type<'ctx> {
         }
     }
 
+    pub fn is_floating_point(self) -> bool {
+        unsafe {
+            gccjit_sys::gcc_jit_type_is_floating_point(self.ptr) != 0
+        }
+    }
+
     pub fn dyncast_vector(self) -> Option<VectorType<'ctx>> {
         unsafe {
             let vector_type = gccjit_sys::gcc_jit_type_dyncast_vector(self.ptr);
