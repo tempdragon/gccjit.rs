@@ -1339,7 +1339,7 @@ pub enum CType {
 }
 
 impl CType {
-    fn to_sys(self) -> gccjit_sys::gcc_jit_types {
+    pub(crate) fn to_sys(self) -> gccjit_sys::gcc_jit_types {
         use gccjit_sys::gcc_jit_types::*;
         use self::CType::*;
 

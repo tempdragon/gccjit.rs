@@ -1,3 +1,4 @@
+use context::CType;
 use std::{ffi::{CStr, CString}, fmt};
 
 pub struct TargetInfo {
@@ -38,6 +39,13 @@ impl TargetInfo {
     pub fn supports_128bit_int(&self) -> bool {
         unsafe {
             gccjit_sys::gcc_jit_target_info_supports_128bit_int(self.ptr) != 0
+        }
+    }
+
+    #[cfg(feature="master")]
+    pub fn supports_target_dependent_type(&self, c_type: CType) -> bool {
+        unsafe {
+            gccjit_sys::gcc_jit_target_info_supports_target_dependent_type(self.ptr, c_type.to_sys()) != 0
         }
     }
 }
