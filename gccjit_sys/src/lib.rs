@@ -681,4 +681,7 @@ extern {
 
     #[cfg(feature="master")]
     pub fn gcc_jit_context_new_alignof(ctxt: *mut gcc_jit_context, typ: *mut gcc_jit_type) -> *mut gcc_jit_rvalue;
+
+    #[cfg(feature="master")]
+    pub fn gcc_jit_lvalue_remove(lvalue: *mut gcc_jit_lvalue);
 }
