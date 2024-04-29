@@ -553,6 +553,7 @@ extern {
     pub fn gcc_jit_type_dyncast_array(typ: *mut gcc_jit_type) -> *mut gcc_jit_type;
     pub fn gcc_jit_type_is_bool(typ: *mut gcc_jit_type) -> c_int;
     pub fn gcc_jit_type_is_integral(typ: *mut gcc_jit_type) -> c_int;
+    #[cfg(feature = "master")]
     pub fn gcc_jit_type_is_floating_point(typ: *mut gcc_jit_type) -> c_int;
     pub fn gcc_jit_type_unqualified(typ: *mut gcc_jit_type) -> *mut gcc_jit_type;
     pub fn gcc_jit_type_is_pointer(typ: *mut gcc_jit_type) -> *mut gcc_jit_type;
