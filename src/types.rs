@@ -172,6 +172,7 @@ impl<'ctx> Type<'ctx> {
         }
     }
 
+    #[cfg(feature = "master")]
     pub fn is_floating_point(self) -> bool {
         unsafe {
             gccjit_sys::gcc_jit_type_is_floating_point(self.ptr) != 0
