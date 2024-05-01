@@ -19,6 +19,7 @@ use rvalue::{self, RValue};
 use std::ffi::CString;
 use types::Type;
 use types;
+use DebugNamespace;
 
 /// FunctionType informs gccjit what sort of function a new function will be.
 /// An exported function is a function that will be exported using the CompileResult
@@ -270,6 +271,13 @@ impl<'ctx> Function<'ctx> {
                     gccjit_sys::gcc_jit_function_add_string_attribute(self.ptr, attribute.as_sys(), cstr.as_ptr());
                 }
             },
+        }
+    }
+
+    #[cfg(feature="master")]
+    pub fn set_parent_debug_namespace(&self, dbg_namespace: DebugNamespace) {
+        unsafe {
+            gccjit_sys::gcc_jit_function_set_parent_debug_namespace(self.ptr, dbg_namespace.as_ptr());
         }
     }
 }

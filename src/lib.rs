@@ -32,6 +32,8 @@ mod function;
 mod block;
 #[cfg(feature="master")]
 mod target_info;
+#[cfg(feature="master")]
+mod debug_namespace;
 
 pub use context::Context;
 pub use context::CType;
@@ -58,6 +60,8 @@ pub use function::{Function, FunctionType};
 pub use block::{Block, BinaryOp, UnaryOp, ComparisonOp};
 #[cfg(feature="master")]
 pub use target_info::TargetInfo;
+#[cfg(feature="master")]
+pub use debug_namespace::DebugNamespace;
 
 #[cfg(feature="master")]
 pub fn set_global_personality_function_name(name: &'static [u8]) {

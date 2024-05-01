@@ -22,6 +22,9 @@ use structs::{self, Struct};
 use target_info::{self, TargetInfo};
 use Type;
 use types;
+#[cfg(feature = "master")]
+use DebugNamespace;
+
 
 #[repr(C)]
 #[derive(Debug)]
@@ -1109,6 +1112,24 @@ impl<'ctx> Context<'ctx> {
                 panic!("{}", error);
             }
             parameter::from_ptr(ptr)
+        }
+    }
+
+    #[cfg(feature = "master")]
+    pub fn new_debug_namespace<S: AsRef<str>>(
+        &self,
+        name: S,
+        parent: Option<DebugNamespace>,
+    ) -> DebugNamespace {
+        unsafe {
+            let cstr = CString::new(name.as_ref()).unwrap();
+            let parent = match parent {
+                Some(parent) => DebugNamespace::as_ptr(&parent),
+                None => ptr::null_mut(),
+            };
+            let ptr =
+                gccjit_sys::gcc_jit_context_new_debug_namespace(self.ptr, cstr.as_ptr(), parent);
+            DebugNamespace::from_ptr(ptr)
         }
     }
 

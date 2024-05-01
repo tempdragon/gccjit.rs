@@ -22,6 +22,7 @@ pub enum gcc_jit_function_type {}
 pub enum gcc_jit_vector_type {}
 pub enum gcc_jit_extended_asm {}
 pub enum gcc_jit_target_info {}
+pub enum gcc_jit_debug_namespace {}
 
 #[repr(C)]
 pub enum gcc_jit_tls_model {
@@ -55,6 +56,7 @@ pub enum gcc_jit_bool_option {
     GCC_JIT_BOOL_OPTION_DUMP_EVERYTHING,
     GCC_JIT_BOOL_OPTION_SELFCHECK_GC,
     GCC_JIT_BOOL_OPTION_KEEP_INTERMEDIATES,
+    #[cfg(feature="master")]
     GCC_JIT_BOOL_OPTION_MANGLED_FUNCTION_NAME,
     GCC_JIT_NUM_BOOL_OPTIONS
 }
@@ -672,4 +674,13 @@ extern {
     #[cfg(feature="master")]
     pub fn gcc_jit_rvalue_set_location(rvalue: *mut gcc_jit_rvalue,
                                        loc: *mut gcc_jit_location);
+
+    #[cfg(feature="master")]
+    pub fn gcc_jit_context_new_debug_namespace(ctxt: *mut gcc_jit_context,
+				               name: *const c_char,
+				               parent: *const gcc_jit_debug_namespace) -> *mut gcc_jit_debug_namespace;
+
+    #[cfg(feature="master")]
+    pub fn gcc_jit_function_set_parent_debug_namespace(func: *mut gcc_jit_function,
+                                                       debug_namespace : *const gcc_jit_debug_namespace);
 }
